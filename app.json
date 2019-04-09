@@ -1,0 +1,36 @@
+{
+  "expo": {
+    "name": "hive",
+    "description": "Hive client app.",
+    "slug": "hive-client",
+    "privacy": "unlisted",
+    "sdkVersion": "32.0.0",
+    "platforms": ["android"],
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "splash": {
+      "image": "./assets/images/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "notification": {
+      "icon": "./assets/images/icon.png",
+      "androidMode": "default"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "cz.martinkuric.hive"
+    },
+    "android": {
+      "package": "cz.martinkuric.hive",
+      "googleServicesFile": "./google-services.json"
+    }
+  }
+}
