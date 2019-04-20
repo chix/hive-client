@@ -2,8 +2,9 @@ import API from '../constants/Api';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 import React from 'react';
-import { ActivityIndicator, Platform, StyleSheet, Text, ToastAndroid, View } from 'react-native';
+import { ActivityIndicator, FlatList, Platform, StyleSheet, ToastAndroid, View } from 'react-native';
 import { Notifications } from 'expo';
+import { Chart } from '../components/Chart';
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -30,7 +31,14 @@ export default class HomeScreen extends React.Component {
     }
     return (
       <View style={styles.container}>
-        <Text>Hello!</Text>
+        <FlatList
+          data={this.state.dataSource}
+          renderItem={(item) => <Chart {...item}/>}
+          keyExtractor={(item) => item.id.toString()}
+          onRefresh={this.fetchData}
+          refreshing={this.state.isLoading}
+        >
+        </FlatList>
       </View>
     );
   }
@@ -40,11 +48,9 @@ export default class HomeScreen extends React.Component {
   }
 
   fetchData = async () => {
-    return this.setState({isLoading: false});
-
     this.setState({isLoading: true});
 
-    return fetch(API.host+'/api/graphs')
+    return fetch(API.host+'/api/charts')
       .then((response) => {
         if (response.ok === false) {
           throw new Error(response.statusText);

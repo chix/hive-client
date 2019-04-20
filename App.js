@@ -11,8 +11,8 @@ export default class App extends React.Component {
 
   componentDidMount() {
     if (Platform.OS === 'android') {
-      Expo.Notifications.createChannelAndroidAsync('new-listing', {
-        name: 'New listing',
+      Expo.Notifications.createChannelAndroidAsync('notifications', {
+        name: 'Notifications',
         priority: 'max',
         sound: true,
         vibrate: true,

@@ -14,5 +14,9 @@ export default {
   warningText: '#666804',
   errorText: '#fff',
   noticeText: '#fff',
+  chartAxis: 'rgba(96,100,109, 1)',
+  chartGrid: 'rgba(96,100,109, 0.1)',
+  chartLine: tintColor,
+  chartFill: tintColor,
   button: tintColor,
 };

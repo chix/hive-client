@@ -12,4 +12,7 @@ export default {
   headerFontSize: 24,
   subheaderFontSize: 18,
   normalFontSize: 16,
+  timeAxisFontSize: 7,
+  weightAxisFontSize: 8,
+  chartPadding: {top: 20, bottom: 40, left: 45, right: 15},
 };
