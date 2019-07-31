@@ -2,7 +2,7 @@ import API from '../constants/Api';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 import React from 'react';
-import { ActivityIndicator, FlatList, Platform, StyleSheet, ToastAndroid, View } from 'react-native';
+import { ActivityIndicator, FlatList, Picker, Platform, StyleSheet, Text, ToastAndroid, View } from 'react-native';
 import { Notifications } from 'expo';
 import { Chart } from '../components/Chart';
 
@@ -13,7 +13,7 @@ export default class HomeScreen extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { isLoading: true, dataSource: [] };
+    this.state = { isLoading: true, chartType: 'line', chartMode: 'hourly', dataSource: [] };
   }
 
   componentDidMount() {
@@ -31,12 +31,29 @@ export default class HomeScreen extends React.Component {
     }
     return (
       <View style={styles.container}>
+        <View style={styles.pickerContainer}>
+          <Text style={styles.pickerLabel}>Data:</Text>
+          <Picker
+            selectedValue={this.state.chartMode}
+            style={styles.picker}
+            mode="dropdown"
+            onValueChange={(itemValue) => {
+              if (itemValue !== this.state.chartMode) {
+                this.setState({chartMode: itemValue}, this.fetchData);
+              }
+            }}
+          >
+            <Picker.Item label="Hourly" value="hourly" />
+            <Picker.Item label="Daily" value="daily" />
+          </Picker>
+        </View>
         <FlatList
           data={this.state.dataSource}
           renderItem={(item) => <Chart {...item}/>}
           keyExtractor={(item) => item.id.toString()}
           onRefresh={this.fetchData}
           refreshing={this.state.isLoading}
+          style={styles.chartsContainer}
         >
         </FlatList>
       </View>
@@ -50,7 +67,7 @@ export default class HomeScreen extends React.Component {
   fetchData = async () => {
     this.setState({isLoading: true});
 
-    return fetch(API.host+'/api/charts')
+    return fetch(API.host+'/api/charts/'+this.state.chartMode+'/'+this.state.chartType)
       .then((response) => {
         if (response.ok === false) {
           throw new Error(response.statusText);
@@ -86,9 +103,29 @@ export default class HomeScreen extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     marginTop: Layout.mainStatusBarHeight,
     backgroundColor: Colors.background,
+  },
+  chartsContainer: {
+    marginTop: 30
+  },
+  pickerContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center'
+  },
+  pickerLabel: {
+    height: 30,
+    width: 120,
+    marginTop: 2,
+    textAlign: 'right',
+    fontSize: Layout.labelFontSize,
+    color: Colors.text
+  },
+  picker: {
+    width: 120,
+    height: 30,
+    color: Colors.text
   },
   loadingContainer: {
     flex: 1,

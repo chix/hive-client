@@ -2,7 +2,7 @@ import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { VictoryArea, VictoryAxis, VictoryBar, VictoryChart, VictoryLine, VictoryTheme } from "victory-native";
+import { VictoryArea, VictoryAxis, VictoryBar, VictoryChart, VictoryLabel, VictoryLine, VictoryTheme } from "victory-native";
 
 export class Chart extends React.Component {
   render() {
@@ -27,6 +27,7 @@ export class Chart extends React.Component {
             <VictoryAxis
               tickCount={12}
               tickFormat={(t) => `${this.formatTimeAxis(t)}`}
+              tickLabelComponent={<VictoryLabel angle={35} />}
               style={{
                 axis: {stroke: Colors.chartAxis},
                 grid: {stroke: Colors.chartGrid},
@@ -38,6 +39,7 @@ export class Chart extends React.Component {
               dependentAxis
               tickCount={12}
               tickFormat={(t) => `${this.formatWeightAxis(t)}`}
+              tickLabelComponent={<VictoryLabel angle={-35} />}
               style={{
                 axis: {stroke: Colors.chartAxis},
                 grid: {stroke: Colors.chartGrid},
@@ -58,6 +60,7 @@ export class Chart extends React.Component {
             <VictoryAxis
               tickCount={12}
               tickFormat={(t) => `${this.formatTimeAxis(t)}`}
+              tickLabelComponent={<VictoryLabel angle={35} />}
               style={{
                 axis: {stroke: Colors.chartAxis},
                 ticks: {stroke: Colors.chartAxis},
@@ -68,6 +71,7 @@ export class Chart extends React.Component {
               dependentAxis
               tickCount={12}
               tickFormat={(t) => `${this.formatWeightAxis(t)}`}
+              tickLabelComponent={<VictoryLabel angle={-35} />}
               style={{
                 axis: {stroke: Colors.chartAxis},
                 ticks: {stroke: Colors.chartAxis},
@@ -86,6 +90,7 @@ export class Chart extends React.Component {
             <VictoryAxis
               tickCount={12}
               tickFormat={(t) => `${this.formatTimeAxis(t)}`}
+              tickLabelComponent={<VictoryLabel angle={35} />}
               style={{
                 axis: {stroke: Colors.chartAxis},
                 ticks: {stroke: Colors.chartAxis},
@@ -96,6 +101,7 @@ export class Chart extends React.Component {
               dependentAxis
               tickCount={12}
               tickFormat={(t) => `${this.formatWeightAxis(t)}`}
+              tickLabelComponent={<VictoryLabel angle={-35} />}
               style={{
                 axis: {stroke: Colors.chartAxis},
                 ticks: {stroke: Colors.chartAxis},
@@ -114,8 +120,13 @@ export class Chart extends React.Component {
 
   formatTimeAxis = (timestamp) => {
     const date = new Date(timestamp * 1000);
+    const { item } = this.props;
     if (date) {
-      return date.getHours().toString().padStart(2, '0') + ':' + date.getMinutes().toString().padStart(2, '0');
+      if (item.mode === 'daily') {
+        return date.getDate().toString().padStart(2, '0') + '.' + date.getMonth().toString().padStart(2, '0') + '.';
+      } else {
+        return date.getHours().toString().padStart(2, '0') + ':' + date.getMinutes().toString().padStart(2, '0');
+      }
     }
     return timestamp;
   }
