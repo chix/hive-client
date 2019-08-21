@@ -17,9 +17,18 @@ export class Chart extends React.Component {
   }
 
   renderChart = (type, data) => {
+    let tickValues = [];
+
     if (data.length === 0) {
       return (<Text style={styles.subheaderText}>No data</Text>);
     }
+
+    data.map((item, index) => {
+      if (index % 2 === 0) {
+        tickValues.push(item.x);
+      }
+    });
+
     switch (type) {
       case 'line':
         return (
@@ -30,7 +39,7 @@ export class Chart extends React.Component {
             domainPadding={Layout.domainPadding}
           >
             <VictoryAxis
-              tickCount={12}
+              tickValues={tickValues}
               tickFormat={(t) => `${this.formatTimeAxis(t)}`}
               tickLabelComponent={<VictoryLabel angle={35} />}
               style={{
@@ -68,7 +77,7 @@ export class Chart extends React.Component {
             domainPadding={Layout.domainPaddingBar}
           >
             <VictoryAxis
-              tickCount={12}
+              tickValues={tickValues}
               tickFormat={(t) => `${this.formatTimeAxis(t)}`}
               tickLabelComponent={<VictoryLabel angle={35} />}
               style={{
@@ -103,7 +112,7 @@ export class Chart extends React.Component {
             domainPadding={Layout.domainPadding}
           >
             <VictoryAxis
-              tickCount={12}
+              tickValues={tickValues}
               tickFormat={(t) => `${this.formatTimeAxis(t)}`}
               tickLabelComponent={<VictoryLabel angle={35} />}
               style={{
