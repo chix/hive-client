@@ -2,7 +2,7 @@ import API from '../constants/Api';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 import React from 'react';
-import { ActivityIndicator, FlatList, Picker, Platform, StyleSheet, Text, ToastAndroid, View } from 'react-native';
+import { ActivityIndicator, AsyncStorage, FlatList, Platform, StyleSheet, ToastAndroid, View } from 'react-native';
 import { Notifications } from 'expo';
 import { Chart } from '../components/Chart';
 
@@ -13,12 +13,45 @@ export default class HomeScreen extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { isLoading: true, chartType: 'line', chartMode: 'hourly', dataSource: [] };
+    this.state = { isLoading: true, chartType: 'line', dataGranularity: 'hourly', dataSource: [] };
   }
 
   componentDidMount() {
+    const { navigation } = this.props;
+
     Notifications.addListener(this.handleNotification);
-    return this.fetchData();
+
+    this.focusListener = navigation.addListener("didFocus", () => {
+      AsyncStorage.getItem('@Settings:main')
+      .then((settings) => {
+        this.applySettings(settings);
+      });
+    });
+
+    AsyncStorage.getItem('@Settings:main')
+    .then((settings) => {
+      if (!this.applySettings(settings)) {
+        this.fetchData();
+      }
+    });
+  }
+
+  applySettings(settings) {
+    if (settings !== null) {
+      const parsedSettings = JSON.parse(settings);
+      let newState = {};
+      if (parsedSettings.dataGranularity && this.state.dataGranularity !== parsedSettings.dataGranularity) {
+        newState.dataGranularity = parsedSettings.dataGranularity;
+      }
+      if (parsedSettings.chartType && this.state.chartType !== parsedSettings.chartType) {
+        newState.chartType = parsedSettings.chartType;
+      }
+      if (Object.keys(newState).length > 0) {
+        this.setState(newState, this.fetchData);
+        return true;
+      }
+    }
+    return false;
   }
 
   render() {
@@ -31,29 +64,12 @@ export default class HomeScreen extends React.Component {
     }
     return (
       <View style={styles.container}>
-        <View style={styles.pickerContainer}>
-          <Text style={styles.pickerLabel}>Data:</Text>
-          <Picker
-            selectedValue={this.state.chartMode}
-            style={styles.picker}
-            mode="dropdown"
-            onValueChange={(itemValue) => {
-              if (itemValue !== this.state.chartMode) {
-                this.setState({chartMode: itemValue}, this.fetchData);
-              }
-            }}
-          >
-            <Picker.Item label="Hourly" value="hourly" />
-            <Picker.Item label="Daily" value="daily" />
-          </Picker>
-        </View>
         <FlatList
           data={this.state.dataSource}
           renderItem={(item) => <Chart {...item}/>}
           keyExtractor={(item) => item.id.toString()}
           onRefresh={this.fetchData}
           refreshing={this.state.isLoading}
-          style={styles.chartsContainer}
         >
         </FlatList>
       </View>
@@ -67,7 +83,7 @@ export default class HomeScreen extends React.Component {
   fetchData = async () => {
     this.setState({isLoading: true});
 
-    return fetch(API.host+'/api/charts/'+this.state.chartMode+'/'+this.state.chartType)
+    return fetch(API.host+'/api/charts/'+this.state.dataGranularity+'/'+this.state.chartType)
       .then((response) => {
         if (response.ok === false) {
           throw new Error(response.statusText);
@@ -105,27 +121,6 @@ const styles = StyleSheet.create({
   container: {
     marginTop: Layout.mainStatusBarHeight,
     backgroundColor: Colors.background,
-  },
-  chartsContainer: {
-    marginTop: 30
-  },
-  pickerContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center'
-  },
-  pickerLabel: {
-    height: 30,
-    width: 120,
-    marginTop: 2,
-    textAlign: 'right',
-    fontSize: Layout.labelFontSize,
-    color: Colors.text
-  },
-  picker: {
-    width: 120,
-    height: 30,
-    color: Colors.text
   },
   loadingContainer: {
     flex: 1,

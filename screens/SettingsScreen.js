@@ -2,7 +2,7 @@ import API from '../constants/Api';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 import React from 'react';
-import { AsyncStorage, Platform, ScrollView, StyleSheet, Switch, Text, ToastAndroid, View } from 'react-native';
+import { AsyncStorage, Picker, Platform, ScrollView, StyleSheet, Switch, Text, ToastAndroid, View } from 'react-native';
 
 export default class SettingsScreen extends React.Component {
   static navigationOptions = {
@@ -15,11 +15,13 @@ export default class SettingsScreen extends React.Component {
     this.state = {
       settingsDisabled: true,
       settings: {
+        dataGranularity: 'hourly',
+        chartType: 'line',
         notificationsEnabled: false,
       },
     };
 
-    AsyncStorage.getItem('@Notifications:'+this.props.screenProps.expoToken)
+    AsyncStorage.getItem('@Settings:main')
     .then((settings) => {
       if (settings !== null) {
         const parsedSettings = this.getSettings(JSON.parse(settings));
@@ -40,6 +42,43 @@ export default class SettingsScreen extends React.Component {
 
     return (
       <ScrollView style={styles.container}>
+        <View style={styles.chartTypePickerContainer}>
+          <Text style={settingsEnabled ? styles.textLabel : styles.textLabelDisabled}>
+            Chart type
+          </Text>
+          <Text style={styles.textLabel}></Text>
+          <Picker
+            disabled={!settingsEnabled}
+            selectedValue={settings.chartType}
+            onValueChange={this.onChartTypeChange}
+            style={styles.picker}
+          >
+            <Picker.Item label="Line" value="line" />
+            <Picker.Item label="Bar" value="bar" />
+            <Picker.Item label="Area" value="area" />
+          </Picker>
+        </View>
+
+        <View style={styles.separator}/>
+
+        <View style={styles.dataGranularityPickerContainer}>
+          <Text style={settingsEnabled ? styles.textLabel : styles.textLabelDisabled}>
+            Data granularity
+          </Text>
+          <Text style={styles.textLabel}></Text>
+          <Picker
+            disabled={!settingsEnabled}
+            selectedValue={settings.dataGranularity}
+            onValueChange={this.onDataGranularityChange}
+            style={styles.picker}
+          >
+            <Picker.Item label="Hourly" value="hourly" />
+            <Picker.Item label="Daily" value="daily" />
+          </Picker>
+        </View>
+
+        <View style={styles.separator}/>
+
         <View style={styles.notificationSwitchContainer}>
           <Text style={settingsEnabled ? styles.textLabel : styles.textLabelDisabled}>
             Enable notifications
@@ -53,6 +92,14 @@ export default class SettingsScreen extends React.Component {
         </View>
       </ScrollView>
     );
+  }
+
+  onChartTypeChange = (value) => {
+    this.persistSettings({chartType: value});
+  }
+
+  onDataGranularityChange = (value) => {
+    this.persistSettings({dataGranularity: value});
   }
 
   onNotificationsEnabledChange = (value) => {
@@ -88,7 +135,7 @@ export default class SettingsScreen extends React.Component {
         throw new Error(response.statusText);
       }
       return AsyncStorage.setItem(
-        '@Notifications:'+this.props.screenProps.expoToken,
+        '@Settings:main',
         JSON.stringify(settings)
       ).
       then(() => {
@@ -110,6 +157,20 @@ const styles = StyleSheet.create({
     paddingTop: Math.round(Layout.sideMargin / 2),
     backgroundColor: Colors.background,
   },
+  chartTypePickerContainer: {
+    flex: 1,
+    marginLeft: Layout.sideMargin,
+    marginRight: Layout.sideMargin,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  dataGranularityPickerContainer: {
+    flex: 1,
+    marginLeft: Layout.sideMargin,
+    marginRight: Layout.sideMargin,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
   notificationSwitchContainer: {
     flex: 1,
     marginLeft: Layout.sideMargin,
@@ -127,6 +188,11 @@ const styles = StyleSheet.create({
   },
   text: {
     color: Colors.text,
+  },
+  picker: {
+    height: 24,
+    width: 120,
+    color: Colors.text
   },
   separator: {
     borderWidth: 0.3,
