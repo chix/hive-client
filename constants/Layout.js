@@ -15,4 +15,6 @@ export default {
   timeAxisFontSize: 12,
   weightAxisFontSize: 12,
   chartPadding: {top: 20, bottom: 40, left: 50, right: 15},
+  domainPadding: {y: [0, 20]},
+  domainPaddingBar: {y: [0, 20], x: [5, 0]},
 };

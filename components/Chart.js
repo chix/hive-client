@@ -23,7 +23,12 @@ export class Chart extends React.Component {
     switch (type) {
       case 'line':
         return (
-          <VictoryChart width={Layout.width} theme={VictoryTheme.material} padding={Layout.chartPadding}>
+          <VictoryChart
+            width={Layout.width}
+            theme={VictoryTheme.material}
+            padding={Layout.chartPadding}
+            domainPadding={Layout.domainPadding}
+          >
             <VictoryAxis
               tickCount={12}
               tickFormat={(t) => `${this.formatTimeAxis(t)}`}
@@ -56,7 +61,12 @@ export class Chart extends React.Component {
         );
       case 'bar':
         return (
-          <VictoryChart width={Layout.width} theme={VictoryTheme.material} domainPadding={5} padding={Layout.chartPadding}>
+          <VictoryChart
+            width={Layout.width}
+            theme={VictoryTheme.material}
+            padding={Layout.chartPadding}
+            domainPadding={Layout.domainPaddingBar}
+          >
             <VictoryAxis
               tickCount={12}
               tickFormat={(t) => `${this.formatTimeAxis(t)}`}
@@ -86,7 +96,12 @@ export class Chart extends React.Component {
         );
       case 'area':
         return (
-          <VictoryChart width={Layout.width} theme={VictoryTheme.material} padding={Layout.chartPadding}>
+          <VictoryChart
+            width={Layout.width}
+            theme={VictoryTheme.material}
+            padding={Layout.chartPadding}
+            domainPadding={Layout.domainPadding}
+          >
             <VictoryAxis
               tickCount={12}
               tickFormat={(t) => `${this.formatTimeAxis(t)}`}
