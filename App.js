@@ -5,7 +5,7 @@ import { AppLoading, Notifications } from 'expo';
 import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
 import * as Permissions from 'expo-permissions';
-import * as Icon from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 
 export default class App extends React.Component {
   state = {
@@ -75,7 +75,7 @@ export default class App extends React.Component {
     return Promise.all([
       Font.loadAsync({
         // This is the font that we are using for our tab bar
-        ...Icon.Ionicons.font,
+        ...Ionicons.font,
         // We include SpaceMono because we use it in HomeScreen.js. Feel free
         // to remove this if you are not using it in your app
         'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),
