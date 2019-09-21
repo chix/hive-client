@@ -1,7 +1,11 @@
 import AppNavigator from './navigation/AppNavigator';
 import React from 'react';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
-import { AppLoading, Asset, Font, Icon, Notifications, Permissions } from 'expo';
+import { AppLoading, Notifications } from 'expo';
+import { Asset } from 'expo-asset';
+import * as Font from 'expo-font';
+import * as Permissions from 'expo-permissions';
+import * as Icon from '@expo/vector-icons';
 
 export default class App extends React.Component {
   state = {
@@ -11,7 +15,7 @@ export default class App extends React.Component {
 
   componentDidMount() {
     if (Platform.OS === 'android') {
-      Expo.Notifications.createChannelAndroidAsync('notifications', {
+      Notifications.createChannelAndroidAsync('notifications', {
         name: 'Notifications',
         priority: 'max',
         sound: true,
