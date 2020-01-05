@@ -4,8 +4,10 @@
     "description": "Hive client app.",
     "slug": "hive-client",
     "privacy": "unlisted",
-    "sdkVersion": "34.0.0",
-    "platforms": ["android"],
+    "sdkVersion": "35.0.0",
+    "platforms": [
+      "android"
+    ],
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
