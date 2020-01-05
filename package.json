@@ -24,7 +24,9 @@
     "react-native-gesture-handler": "~1.5.0",
     "react-native-reanimated": "~1.4.0",
     "react-native-svg": "9.13.3",
-    "react-navigation": "^3.13.0",
+    "react-navigation": "~4.0.10",
+    "react-navigation-stack": "~1.10.3",
+    "react-navigation-tabs": "~2.6.2",
     "victory-native": "^34.0.0"
   },
   "devDependencies": {
