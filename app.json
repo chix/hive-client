@@ -4,7 +4,6 @@
     "description": "Hive client app.",
     "slug": "hive-client",
     "privacy": "unlisted",
-    "sdkVersion": "36.0.0",
     "platforms": [
       "android"
     ],

@@ -8,7 +8,7 @@ import { Chart } from '../components/Chart';
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
-    header: null,
+    headerShown: false,
   };
 
   constructor(props) {

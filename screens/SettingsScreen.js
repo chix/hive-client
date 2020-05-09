@@ -6,7 +6,7 @@ import { AsyncStorage, Picker, Platform, ScrollView, StyleSheet, Switch, Text, T
 
 export default class SettingsScreen extends React.Component {
   static navigationOptions = {
-    header: null,
+    headerShown: false,
   };
 
   constructor(props) {
