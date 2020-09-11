@@ -7,7 +7,7 @@ export default {
   tabBar: '#fefefe',
   background: '#fff',
   errorBackground: 'red',
-  warningBackground: '#EAEB5E',
+  warningBackground: '#eaeb5e',
   noticeBackground: tintColor,
   text: 'rgba(96,100,109, 1)',
   disabledText: 'rgba(96,100,109, 0.5)',
@@ -19,4 +19,7 @@ export default {
   chartLine: tintColor,
   chartFill: tintColor,
   button: tintColor,
+  buttonLight: 'rgba(47,149,220, 0.25)',
+  buttonOff: '#ccc',
+  buttonOffLight: '#eee',
 };

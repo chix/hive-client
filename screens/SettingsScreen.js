@@ -88,6 +88,8 @@ export default class SettingsScreen extends React.Component {
             disabled={!settingsEnabled}
             value={settings.notificationsEnabled}
             onValueChange={this.onNotificationsEnabledChange}
+            trackColor={{false: Colors.buttonOff, true: Colors.buttonLight}}
+            thumbColor={settings.notificationsEnabled ? Colors.button : Colors.buttonOffLight}
           />
         </View>
       </ScrollView>
@@ -195,7 +197,7 @@ const styles = StyleSheet.create({
     color: Colors.text
   },
   separator: {
-    borderWidth: 0.3,
+    borderWidth: 0.2,
     borderColor: Colors.text,
     marginLeft: Layout.sideMargin,
     marginRight: Layout.sideMargin,

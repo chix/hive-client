@@ -2,9 +2,18 @@ import API from '../constants/Api';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 import React from 'react';
-import { ActivityIndicator, AsyncStorage, FlatList, Platform, StyleSheet, ToastAndroid, View } from 'react-native';
-import { Notifications } from 'expo';
+import {
+  ActivityIndicator,
+  AsyncStorage,
+  FlatList,
+  Platform,
+  RefreshControl,
+  StyleSheet,
+  ToastAndroid,
+  View
+} from 'react-native';
 import { Chart } from '../components/Chart';
+import * as Notifications from 'expo-notifications';
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -19,7 +28,7 @@ export default class HomeScreen extends React.Component {
   componentDidMount() {
     const { navigation } = this.props;
 
-    Notifications.addListener(this.handleNotification);
+    this.notificationResponseListener = Notifications.addNotificationResponseReceivedListener(this.handleNotification);
 
     this.focusListener = navigation.addListener("didFocus", () => {
       AsyncStorage.getItem('@Settings:main')
@@ -34,6 +43,11 @@ export default class HomeScreen extends React.Component {
         this.fetchData();
       }
     });
+  }
+
+  componentWillUnmount() {
+    this.focusListener.remove();
+    this.notificationResponseListener.remove();
   }
 
   applySettings(settings) {
@@ -58,7 +72,7 @@ export default class HomeScreen extends React.Component {
     if (this.state.isLoading) {
       return (
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large"/>
+          <ActivityIndicator size="large" color={Colors.tintColor}/>
         </View>
       )
     }
@@ -68,8 +82,15 @@ export default class HomeScreen extends React.Component {
           data={this.state.dataSource}
           renderItem={(item) => <Chart {...item}/>}
           keyExtractor={(item) => item.id.toString()}
-          onRefresh={this.fetchData}
-          refreshing={this.state.isLoading}
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.isLoading}
+              onRefresh={this.fetchData}
+              tintColor={Colors.background}
+              titleColor={Colors.background}
+              colors={[Colors.tintColor, Colors.tintColor, Colors.tintColor]}
+            />
+          }
         >
         </FlatList>
       </View>
@@ -108,11 +129,12 @@ export default class HomeScreen extends React.Component {
       });
   }
 
-  handleNotification = (notification) => {
+  handleNotification = (response) => {
     const { navigate } = this.props.navigation;
 
-    if (notification.origin === 'selected') {
+    if (response.notification) {
       navigate('Home');
+      this.fetchData();
     }
   }
 }
@@ -125,5 +147,6 @@ const styles = StyleSheet.create({
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
+    backgroundColor: Colors.background,
   },
 });
