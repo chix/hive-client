@@ -33,7 +33,7 @@
     "react-navigation": "^4.4.0",
     "react-navigation-stack": "^2.8.2",
     "react-navigation-tabs": "^2.9.0",
-    "victory-native": "^35.0.1"
+    "victory-native": "^36.6.8"
   },
   "devDependencies": {
     "@types/react": "~16.9.41",
